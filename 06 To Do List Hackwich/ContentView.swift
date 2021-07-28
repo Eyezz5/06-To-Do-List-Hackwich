@@ -8,21 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var things = ["First Thing", "Second Thing", "Third Thing", "Fourth Thing"]
+    @ObservedObject var toDoList = ToDoList()
     var body: some View {
         NavigationView {
             List {
-                ForEach(things, id: \.self) {
-                    thing in Text(thing)
+                ForEach(toDoList.items) {
+                    item in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(item.priority)
+                                .font(.headline)
+                            Text(item.description)
+                        }
+                        Spacer()
+                        Text(item.dueDate, style: .date)
+                    }
                 }
                 .onMove(perform: { indices, newOffset in
-                    things.move(fromOffsets: indices, toOffset: newOffset)
+                    toDoList.items.move(fromOffsets: indices, toOffset: newOffset)
                 })
                 .onDelete(perform: { indexSet in
-                    things.remove(atOffsets: indexSet)
+                    toDoList.items.remove(atOffsets: indexSet)
                 })
             }
-            .navigationBarTitle("Things", displayMode: .inline)
+            .navigationBarTitle("To Do List", displayMode: .inline)
             .navigationBarItems(leading: EditButton())
         }
     }
@@ -31,5 +40,11 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+    struct ToDoItem: Identifiable {
+        var id = UUID()
+        var priority = String()
+        var description = String()
+        var dueDate = Date()
     }
 }
