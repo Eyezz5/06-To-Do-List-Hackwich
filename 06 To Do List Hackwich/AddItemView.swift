@@ -5,7 +5,7 @@
 //  Created by Kareem Almomen on 7/28/21.
 //
 
-import Foundation
+import SwiftUI
 
 struct AddItemView: View {
     @ObservedObject var toDoList: ToDoList
@@ -13,8 +13,8 @@ struct AddItemView: View {
     @State private var description = ""
     @State private var dueDate = Date()
     @Environment(\.presentationMode) var presentationMode
-       static let priorities = ["High", "Medium", "Low"]
-    var body: some view {
+    static let priorities = ["High", "Medium", "Low"]
+    var body: some View {
         NavigationView {
             Form {
                 Picker("Priority", selection: $priority) {
@@ -23,16 +23,17 @@ struct AddItemView: View {
                     }
                 }
                 TextField("Description", text: $description)
-                                DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
-
+                DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
+                
             }
             .navigationBarTitle("Add New To Do Item", displayMode: .inline)
         }
     }
 }
+
 struct AddItemView_Previews: PreviewProvider {
     static var previews: some View {
-        AddItemView(toDoList)
+        AddItemView(toDoList: ToDoList())
     }
 }
 
